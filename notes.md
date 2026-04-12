@@ -4,6 +4,13 @@ As part of Wave 0, please fill out notes for each of the below files. They are i
 PLEASE MAKE FREQUENT COMMITS AS YOU FILL OUT THIS FILE.
 
 ## App.java
+The program purpose: start from one folder
+look inside it and show all subfolders and files
+print them in tree structure.
+Reads input from the terminal
+input go to TruffulaOptions and then 
+TruffulaPrinter to print
+
 
 ## ConsoleColor.java
 
