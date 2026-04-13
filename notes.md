@@ -13,6 +13,10 @@ TruffulaPrinter to print
 
 
 ## ConsoleColor.java
+ANSI escape codes tell the terminal to change text color
+each color stores an ANSI code
+Reset return the terminal text back to default
+
 
 ## ColorPrinter.java / ColorPrinterTest.java
 
