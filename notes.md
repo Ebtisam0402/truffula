@@ -27,6 +27,7 @@ This class stores options:
 -show hidden files or not
 -use colors or not 
 -the path is mandatory
+-java.io.File represents a file or folder on your computer.It only represents the path and information about the file.
 ## TruffulaPrinter.java / TruffulaPrinterTest.java
 
 ## AlphabeticalFileSorter.java
