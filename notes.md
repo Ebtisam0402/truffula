@@ -19,6 +19,8 @@ Reset return the terminal text back to default
 
 
 ## ColorPrinter.java / ColorPrinterTest.java
+ColorPrinter allows setting a current color and printing messages in that color
+to the specified output stream. PrintStream is specializesd output stram used formated data in a human readable format than raw bytes.
 
 ## TruffulaOptions.java / TruffulaOptionsTest.java
 
