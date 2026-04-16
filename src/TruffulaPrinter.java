@@ -107,8 +107,6 @@ public class TruffulaPrinter {
    *    zebra.txt
    */
   public void printTree() {
-    // TODO: Implement this!
-    // REQUIRED: ONLY use java.io, DO NOT use java.nio
     File root = options.getRoot();
     if(root == null || !root.exists()){
       return;
@@ -118,6 +116,9 @@ public class TruffulaPrinter {
   }
 
   private void printTree(File current, int depth){
+    if(!options.isShowHidden() || current.isHidden()){
+      return;
+    }
     String indent = "   ".repeat(depth);
     String name = current.getName();
 
@@ -137,7 +138,10 @@ public class TruffulaPrinter {
 
     List<File> children = new ArrayList<>();
     for(File child: childrenArr){
-      children.add(child);
+      if(options.isShowHidden() || !child.isHidden()){
+        children.add(child);
+      }
+      
     }
 
     Collections.sort(children, new Comparator<File>() {
