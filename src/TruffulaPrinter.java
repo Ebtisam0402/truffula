@@ -1,4 +1,8 @@
+import java.io.File;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -105,14 +109,54 @@ public class TruffulaPrinter {
   public void printTree() {
     // TODO: Implement this!
     // REQUIRED: ONLY use java.io, DO NOT use java.nio
-    
+    File root = options.getRoot();
+    if(root == null || !root.exists()){
+      return;
+    }
+    printTree(root, 0);
+
+  }
+
+  private void printTree(File current, int depth){
+    String indent = "   ".repeat(depth);
+    String name = current.getName();
+
+    if(current.isDirectory()){
+      name += "/";
+    }
+
+    out.println(indent + name);
+
+    if(!current.isDirectory()){
+      return;
+    }
+    File[] childrenArr = current.listFiles();
+    if (childrenArr == null) {
+    return;
+    }
+
+    List<File> children = new ArrayList<>();
+    for(File child: childrenArr){
+      children.add(child);
+    }
+
+    Collections.sort(children, new Comparator<File>() {
+    public int compare(File file1, File file2) {
+    return file1.getName().compareToIgnoreCase(file2.getName());
+  }
+  });
+  for (File child: children){
+    printTree(child, depth + 1);
+  }
+
+    //out.println("printTree was called!");
+    //out.println("My options are: " + options);
+  }
     // Hints:
     // - Add a recursive helper method
     // - For Wave 6: Use AlphabeticalFileSorter
     // DO NOT USE SYSTEM.OUT.PRINTLN
     // USE out.println instead (will use your ColorPrinter)
 
-    out.println("printTree was called!");
-    out.println("My options are: " + options);
-  }
+  
 }
