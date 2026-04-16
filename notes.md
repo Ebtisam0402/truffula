@@ -29,6 +29,7 @@ This class stores options:
 -the path is mandatory
 -java.io.File represents a file or folder on your computer.It only represents the path and information about the file.
 ## TruffulaPrinter.java / TruffulaPrinterTest.java
+-recursive traversal
 -printing a directory tree structure
 -sorting files and directories
 -ignore uppercase vs lowercase when sorting
