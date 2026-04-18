@@ -152,19 +152,7 @@ public class TruffulaPrinterTest {
 
     @Test
     public void testPrintTree_SimpleTree(@TempDir File tempDir) throws IOException {
-        // Build the example directory structure:
-        // myFolder/
-        //    .hidden.txt
-        //    Apple.txt
-        //    banana.txt
-        //    Documents/
-        //       images/
-        //          Cat.png
-        //          cat.png
-        //          Dog.png
-        //       notes.txt
-        //       README.md
-        //    zebra.txt
+     
 
         // Create "myFolder"
         File myFolder = new File(tempDir, "myFolder");
@@ -236,4 +224,132 @@ public class TruffulaPrinterTest {
         // Assert that the output matches the expected output exactly
         assertEquals(expected.toString(), output);
     }
+
+    @Test
+public void testPrintTree_HiddenFilesNotShown(@TempDir File tempDir) throws IOException {
+
+    File myFolder = new File(tempDir, "myFolder");
+    assertTrue(myFolder.mkdir(), "myFolder should be created");
+
+    File apple = new File(myFolder, "Apple.txt");
+    File banana = new File(myFolder, "banana.txt");
+    File zebra = new File(myFolder, "zebra.txt");
+    apple.createNewFile();
+    banana.createNewFile();
+    zebra.createNewFile();
+
+    createHiddenFile(myFolder, ".hidden.txt");
+
+    
+    File documents = new File(myFolder, "Documents");
+    assertTrue(documents.mkdir(), "Documents directory should be created");
+
+    
+    File readme = new File(documents, "README.md");
+    File notes = new File(documents, "notes.txt");
+    readme.createNewFile();
+    notes.createNewFile();
+
+    File images = new File(documents, "images");
+    assertTrue(images.mkdir(), "images directory should be created");
+
+    File cat = new File(images, "cat.png");
+    File dog = new File(images, "Dog.png");
+    cat.createNewFile();
+    dog.createNewFile();
+
+
+    TruffulaOptions options = new TruffulaOptions(myFolder, false, false);
+
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    PrintStream printStream = new PrintStream(baos);
+
+    
+    TruffulaPrinter printer = new TruffulaPrinter(options, printStream);
+
+    printer.printTree();
+
+    String output = baos.toString();
+    String nl = System.lineSeparator();
+
+    ConsoleColor reset = ConsoleColor.RESET;
+    ConsoleColor white = ConsoleColor.WHITE;
+
+    StringBuilder expected = new StringBuilder();
+    expected.append(white).append("myFolder/").append(nl).append(reset);
+    expected.append(white).append("   Apple.txt").append(nl).append(reset);
+    expected.append(white).append("   banana.txt").append(nl).append(reset);
+    expected.append(white).append("   Documents/").append(nl).append(reset);
+    expected.append(white).append("      images/").append(nl).append(reset);
+    expected.append(white).append("         cat.png").append(nl).append(reset);
+    expected.append(white).append("         Dog.png").append(nl).append(reset);
+    expected.append(white).append("      notes.txt").append(nl).append(reset);
+    expected.append(white).append("      README.md").append(nl).append(reset);
+    expected.append(white).append("   zebra.txt").append(nl).append(reset);
+
+   
+    assertEquals(expected.toString(), output);
+}
+
+@Test
+public void testPrintTree_HiddenFilesShown(@TempDir File tempDir) throws IOException {
+
+    File myFolder = new File(tempDir, "myFolder");
+    assertTrue(myFolder.mkdir(), "myFolder should be created");
+
+    File apple = new File(myFolder, "Apple.txt");
+    File banana = new File(myFolder, "banana.txt");
+    File zebra = new File(myFolder, "zebra.txt");
+    apple.createNewFile();
+    banana.createNewFile();
+    zebra.createNewFile();
+
+    createHiddenFile(myFolder, ".hidden.txt");
+
+    File documents = new File(myFolder, "Documents");
+    assertTrue(documents.mkdir(), "Documents directory should be created");
+
+    File readme = new File(documents, "README.md");
+    File notes = new File(documents, "notes.txt");
+    readme.createNewFile();
+    notes.createNewFile();
+
+    File images = new File(documents, "images");
+    assertTrue(images.mkdir(), "images directory should be created");
+
+    File cat = new File(images, "cat.png");
+    File dog = new File(images, "Dog.png");
+    cat.createNewFile();
+    dog.createNewFile();
+
+    TruffulaOptions options = new TruffulaOptions(myFolder, true, false);
+
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    PrintStream printStream = new PrintStream(baos);
+
+    TruffulaPrinter printer = new TruffulaPrinter(options, printStream);
+
+    printer.printTree();
+
+    String output = baos.toString();
+    String nl = System.lineSeparator();
+
+    ConsoleColor reset = ConsoleColor.RESET;
+    ConsoleColor white = ConsoleColor.WHITE;
+
+    StringBuilder expected = new StringBuilder();
+    expected.append(white).append("myFolder/").append(nl).append(reset);
+    expected.append(white).append("   .hidden.txt").append(nl).append(reset);
+    expected.append(white).append("   Apple.txt").append(nl).append(reset);
+    expected.append(white).append("   banana.txt").append(nl).append(reset);
+    expected.append(white).append("   Documents/").append(nl).append(reset);
+    expected.append(white).append("      images/").append(nl).append(reset);
+    expected.append(white).append("         cat.png").append(nl).append(reset);
+    expected.append(white).append("         Dog.png").append(nl).append(reset);
+    expected.append(white).append("      notes.txt").append(nl).append(reset);
+    expected.append(white).append("      README.md").append(nl).append(reset);
+    expected.append(white).append("   zebra.txt").append(nl).append(reset);
+
+    assertEquals(expected.toString(), output);
+}
 }
