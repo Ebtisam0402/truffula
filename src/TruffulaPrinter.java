@@ -116,7 +116,7 @@ public class TruffulaPrinter {
   }
 
   private void printTree(File current, int depth){
-    if(!options.isShowHidden() || current.isHidden()){
+    if(!options.isShowHidden() && current.isHidden()){
       return;
     }
     String indent = "   ".repeat(depth);
@@ -126,7 +126,9 @@ public class TruffulaPrinter {
       name += "/";
     }
 
-    out.println(indent + name);
+    ConsoleColor color = colorSequence.get(depth % colorSequence.size());
+    out.setCurrentColor(color);
+    out.println(indent + name, true);
 
     if(!current.isDirectory()){
       return;
