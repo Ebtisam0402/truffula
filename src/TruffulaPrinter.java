@@ -126,7 +126,13 @@ public class TruffulaPrinter {
       name += "/";
     }
 
-    ConsoleColor color = colorSequence.get(depth % colorSequence.size());
+    ConsoleColor color;
+    if (options.isUseColor()) {
+    color = colorSequence.get(depth % colorSequence.size());
+    } else {
+    color = ConsoleColor.WHITE;
+    }
+
     out.setCurrentColor(color);
     out.println(indent + name, true);
 
@@ -138,19 +144,18 @@ public class TruffulaPrinter {
     return;
     }
 
-    List<File> children = new ArrayList<>();
+    List<File> filtered = new ArrayList<>();
     for(File child: childrenArr){
       if(options.isShowHidden() || !child.isHidden()){
-        children.add(child);
+        filtered.add(child);
       }
       
     }
 
-    Collections.sort(children, new Comparator<File>() {
-    public int compare(File file1, File file2) {
-    return file1.getName().compareToIgnoreCase(file2.getName());
-  }
-  });
+  File[] children = filtered.toArray(new File[0]);
+
+  children = AlphabeticalFileSorter.sort(children);
+  
   for (File child: children){
     printTree(child, depth + 1);
   }
